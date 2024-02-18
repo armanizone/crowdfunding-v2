@@ -7,12 +7,14 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+pb_data
+pocketbase.exe
+
 node_modules
 dist
 dist-ssr
 *.local
 
-pb_data
 
 # Editor directories and files
 .vscode/*
