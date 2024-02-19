@@ -4,7 +4,6 @@ import { pb } from 'shared/api'
 import { useAuth, useModal } from 'shared/hooks'
 import { useNavigate } from 'react-router'
 
-
 /**
  * 
  * @param {import('@mantine/core').ButtonProps} props.rest 
@@ -20,7 +19,7 @@ export const CreateProjectButton = ({...rest}) => {
   const {openModal} = useModal()
 
   async function createProject () {
-    if (!token) return openModal.auth()
+    if (!token) return openModal.auth({title: 'Авторизация'})
     setLoading(true)
     await pb.collection('projects').create({
       user: {},

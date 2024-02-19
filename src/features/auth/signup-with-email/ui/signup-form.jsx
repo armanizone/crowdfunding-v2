@@ -1,26 +1,53 @@
 import { Button, PasswordInput, TextInput } from '@mantine/core';
 import React from 'react'
 import { useForm, Controller } from 'react-hook-form'
+import { signupSchema, signupWithEmail } from '../model/signup';
+import { yupResolver } from "@hookform/resolvers/yup"
+import { showNotification } from '@mantine/notifications';
+import { useLocation, useNavigate } from 'react-router';
 
 export const SignupForm = ({handleType}) => {
 
-  const { control, handleSubmit } = useForm({
-    defaultValues: {
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const { control, handleSubmit, clearErrors, setValue, formState: { errors, isLoading }} = useForm({
+    values: {
       name: '',
       email: '',
       password: '',
       password_confirmation: ''
-    }
+    },
+    resolver: yupResolver(signupSchema)
   })
 
-  const onSumbit = (data) => console.log(data);
+  const [errorMessage, setErrorMessage] = React.useState('')
+  
+  const onSumbit = async (data) => {
+    await signupWithEmail(data)
+    .then((res) => {
+      showNotification({
+        title: 'Айторизация',
+        message: `Вы успешно вошли в систему как ${res?.name}`
+      })
+      navigate(location.pathname)
+    })
+    .catch((err) => {
+      console.log(err, 'err');
+    })
+  };
+
+  function handleInputChange (name, val) {
+    setValue(name, val.currentTarget.value ?? val)
+    clearErrors(name)
+    setErrorMessage('')
+  }
 
   return (
     <form 
-      // onSubmit={(e: React.ChangeEvent<HTMLFormElement>) => handleSubmit(onSumbit)}
-      // className={styles.form}
+      onSubmit={handleSubmit(onSumbit)}
+      className='space-y-4'
     >
-      <div>
         <Controller
           name="name"
           control={control}
@@ -29,54 +56,62 @@ export const SignupForm = ({handleType}) => {
               {...field}
               name='name'
               placeholder='Ваше имя'
-              // className={styles.input}
+              label='Имя'
+              variant='filled'
+              onChange={event => handleInputChange('name', event)}
+              error={errors.name?.message}
             />
           )}
         />
- 
-      </div>
-      <div>
         <Controller
-          name="name"
+          name="email"
           control={control}
           render={({field}) => (
             <TextInput
+              {...field}
               name='email'
               placeholder='Ваш email'
-              // className={styles.input}
+              label='Почта'
+              variant='filled'
+              onChange={event => handleInputChange('email', event)}
+              error={errors.email?.message}
             />
           )}
         />
-      </div>
-      <div>
         <Controller
-          name="name"
+          name="password"
           control={control}
           render={({field}) => (
             <PasswordInput
+              {...field}
               name='password'
               placeholder='Пароль'
-              // className={styles.input}
+              label='Пароль'
+              variant='filled'
+              onChange={event => handleInputChange('password', event)}
+              error={errors.password?.message}
             />
           )}
         />
 
-      </div>
-      <div>
         <Controller
-          name="name"
+          name="password_confirmation"
           control={control}
           render={({field}) => (
             <PasswordInput
+              {...field}
               name='password_confirmation'
               placeholder='Подтверждение пароля'
-              // className={styles.input}
+              label='Подтверждение пароля'
+              variant='filled'
+              onChange={event => handleInputChange('password_confirmation', event)}
+              error={errors.password_confirmation?.message}
             />
           )}
         />
-      </div>
       <Button
         type='submit'
+        fullWidth
       >
         Создать аккаунт
       </Button>

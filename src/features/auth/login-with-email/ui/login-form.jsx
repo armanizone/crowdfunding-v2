@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, PasswordInput, TextInput } from '@mantine/core'
+import { Button, PasswordInput, TextInput, UnstyledButton } from '@mantine/core'
 import { Controller, useForm } from 'react-hook-form'
 
 export const LoginForm = ({handleType}) => {
@@ -15,6 +15,7 @@ export const LoginForm = ({handleType}) => {
     <form 
 			// onSubmit={handleSubmit(onSubmit)}
 			// className={styles.form}
+			className='space-y-4'
 		>
       <Controller
         name="email"
@@ -24,6 +25,7 @@ export const LoginForm = ({handleType}) => {
             {...field}
             type='email' 
             placeholder='Ваш email'
+						label='Почта'
             // className={styles.input}
         /> 
         )}
@@ -35,23 +37,25 @@ export const LoginForm = ({handleType}) => {
 					<PasswordInput
 						{...field}
 						placeholder='Пароль'
+						label='Пароль'
 						// className={styles.input}
 					/> 
 				)}
 			/>
 			<Button
 				type='submit' 
+				fullWidth
 			>
 				Войти
 			</Button>
 			<div className='flex gap-2 justify-center'>
 				<p>Первый раз тут?</p>
-				<p onClick={() => handleType('signup')} className='link'>Зарегистрируйтесь!</p>
+				<UnstyledButton onClick={() => handleType('signup')} className='link'>Зарегистрируйтесь!</UnstyledButton>
 			</div>
 			<div className='text-center'>
-				<span className='link' onClick={() => handleType('forgot')}>
+				<UnstyledButton className='link' onClick={() => handleType('forgot')}>
 					Забыли пароль?
-				</span>
+				</UnstyledButton>
 			</div>
   </form>
   )

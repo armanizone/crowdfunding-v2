@@ -10,73 +10,79 @@ import { EditProject } from 'pages/edit-project'
 import { Explore } from 'pages/explore'
 import { NotFound } from 'pages/not-found'
 import { baseLayout } from './layout/baseLayout'
+import { AppProvider } from './appProvider'
 
 export const router = createBrowserRouter([
   {
-    element: baseLayout, 
+    element: <AppProvider/>,
     children: [
-      { path: '/', element: <Home/>},
-      { path: '/create', element: <CreateProject/>},
-      // { path: '/incubator', element: <Incubator3/>},
-      { 
-        path: '/about', element: <About/>
-      },
       {
-        path: '/explore', element: <Explore/>,
-        // children: [
-        //   {path: 'collection/:name', element: <Collection/>}
-        // ]
-      },
-      { 
-        path: '/profile', element: <Profile/>,
-        // children: [
-        //   { path: 'bill', element: <Bill/>},
-        //   { path: 'investions', element: <Investions/>},
-        //   { 
-        //     path: 'projects', 
-        //     element: <MyProjects/>,
-        //     children: [
-        //       { path: '/profile/projects/:name', element: <Draft/>}
-        //     ],
-        //   },
-        //   { path: 'supports', element: <Supports/> },
-        //   {
-        //     path: 'settings', 
-        //     element: <Settings/>,
-        //     children: [
-        //       { index: true, element: <UserData/>},
-        //       { path: 'change-password', element: <ChangePassword/>}
-        //     ]
-        //   },
-        // ]
-      },
-      {
-        path: '/project/:id',
+        element: baseLayout, 
         children: [
+          { path: '/', element: <Home/>},
+          { path: '/create', element: <CreateProject/>},
+          // { path: '/incubator', element: <Incubator3/>},
           { 
-            element: <Project/>, 
+            path: '/about', element: <About/>
+          },
+          {
+            path: '/explore', element: <Explore/>,
             // children: [
-            //   { index: true, element: <Description/> },
-            //   { path: 'comments', element: <Comments/> },
-            //   { path: 'faq', element: <Faq/> },
-            //   { path: 'rating', element: <Rating/> },
-            //   { path: 'fee', element: <Fee/> },
-            // ] 
+            //   {path: 'collection/:name', element: <Collection/>}
+            // ]
           },
           { 
-            path: 'edit', 
-            element: <EditProject/>, 
+            path: '/profile', element: <Profile/>,
             // children: [
-            //   { index: true, element: <Main/> },
-            //   { path: 'details', element: <Details/> },
-            //   { path: 'rewards', element: <Rewards/> },
-            //   { path: 'verification', element: <Verification/> },
-            //   { path: 'incubator', element: <Incubator/> },
+            //   { path: 'bill', element: <Bill/>},
+            //   { path: 'investions', element: <Investions/>},
+            //   { 
+            //     path: 'projects', 
+            //     element: <MyProjects/>,
+            //     children: [
+            //       { path: '/profile/projects/:name', element: <Draft/>}
+            //     ],
+            //   },
+            //   { path: 'supports', element: <Supports/> },
+            //   {
+            //     path: 'settings', 
+            //     element: <Settings/>,
+            //     children: [
+            //       { index: true, element: <UserData/>},
+            //       { path: 'change-password', element: <ChangePassword/>}
+            //     ]
+            //   },
             // ]
-          }
-        ],
-      },
-      { path: '*', element: <NotFound/>}
+          },
+          {
+            path: '/project/:id',
+            children: [
+              { 
+                element: <Project/>, 
+                // children: [
+                //   { index: true, element: <Description/> },
+                //   { path: 'comments', element: <Comments/> },
+                //   { path: 'faq', element: <Faq/> },
+                //   { path: 'rating', element: <Rating/> },
+                //   { path: 'fee', element: <Fee/> },
+                // ] 
+              },
+              { 
+                path: 'edit', 
+                element: <EditProject/>, 
+                // children: [
+                //   { index: true, element: <Main/> },
+                //   { path: 'details', element: <Details/> },
+                //   { path: 'rewards', element: <Rewards/> },
+                //   { path: 'verification', element: <Verification/> },
+                //   { path: 'incubator', element: <Incubator/> },
+                // ]
+              }
+            ],
+          },
+          { path: '*', element: <NotFound/>}
+        ]
+      }
     ]
   }
-  ])
+])
