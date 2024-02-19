@@ -1,15 +1,12 @@
 import React from 'react'
 import { CreateProjectButton } from 'features/create-project'
-import { Button, Checkbox } from '@mantine/core'
-import { useModal } from 'shared/hooks'
+import { Checkbox } from '@mantine/core'
 
 import createWelcome from 'shared/assets/create-welcome.svg'
 import { Conditions } from './conditions'
 import { Faq } from './faq'
 
 export const CreateProject = () => {
-
-  const { openModal } = useModal()
 
   const [check, setCheck] = React.useState({
     service: false,

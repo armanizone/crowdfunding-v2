@@ -1,0 +1,5 @@
+export { EditProjectTabs } from './ui/edit-project-tabs'
+export { Main } from './ui/main'
+export { Details } from './ui/details'
+export { Rewards } from './ui/rewards'
+export { Verification  } from './ui/verification'

@@ -11,6 +11,7 @@ import { Explore } from 'pages/explore'
 import { NotFound } from 'pages/not-found'
 import { baseLayout } from './layout/baseLayout'
 import { AppProvider } from './appProvider'
+import { Details, Main, Rewards, Verification } from 'widgets/edit-project-tabs'
 
 export const router = createBrowserRouter([
   {
@@ -59,24 +60,10 @@ export const router = createBrowserRouter([
             children: [
               { 
                 element: <Project/>, 
-                // children: [
-                //   { index: true, element: <Description/> },
-                //   { path: 'comments', element: <Comments/> },
-                //   { path: 'faq', element: <Faq/> },
-                //   { path: 'rating', element: <Rating/> },
-                //   { path: 'fee', element: <Fee/> },
-                // ] 
               },
               { 
                 path: 'edit', 
                 element: <EditProject/>, 
-                // children: [
-                //   { index: true, element: <Main/> },
-                //   { path: 'details', element: <Details/> },
-                //   { path: 'rewards', element: <Rewards/> },
-                //   { path: 'verification', element: <Verification/> },
-                //   { path: 'incubator', element: <Incubator/> },
-                // ]
               }
             ],
           },

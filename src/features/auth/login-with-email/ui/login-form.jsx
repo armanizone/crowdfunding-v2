@@ -1,20 +1,50 @@
 import React from 'react'
 import { Button, PasswordInput, TextInput, UnstyledButton } from '@mantine/core'
 import { Controller, useForm } from 'react-hook-form'
+import { loginSchema, loginWithEmail } from '../model/login'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { showNotification } from '@mantine/notifications'
 
-export const LoginForm = ({handleType}) => {
+export const LoginForm = ({handleType, ...rest}) => {
 
-	const { control, handleSubmit, } = useForm({
+	const { control, handleSubmit, clearErrors, setValue, formState: { errors } } = useForm({
     values: {
       email: '',
       password: ''
-    }
+    },
+    resolver: yupResolver(loginSchema)
   })
+
+  const [errorMessage, setErrorMessage] = React.useState('')
+
+	const onSubmit = async (data) => {
+		await loginWithEmail(data)
+		.then((res) => {
+			console.log(res, 'res');
+			showNotification({
+				title: 'Вход',
+				message: `Вы успешно вошли в систему как ${res.record?.name}`,
+				color: 'blue'
+			})
+			rest.context.closeModal(rest.id)
+			rest.innerProps?.onSucc()
+		})
+		.catch(err => {
+			setErrorMessage(err)
+		})
+	}
+
+	function handleInputChange (name, val) {
+    setValue(name, val.currentTarget.value ?? val)
+    clearErrors(name)
+    setErrorMessage('')
+  }
+
+
 
   return (
     <form 
-			// onSubmit={handleSubmit(onSubmit)}
-			// className={styles.form}
+			onSubmit={handleSubmit(onSubmit)}
 			className='space-y-4'
 		>
       <Controller
@@ -26,7 +56,9 @@ export const LoginForm = ({handleType}) => {
             type='email' 
             placeholder='Ваш email'
 						label='Почта'
-            // className={styles.input}
+						error={errors.email?.message}
+						onChange={event => handleInputChange('email', event)}
+						variant='filled'
         /> 
         )}
       /> 
@@ -38,7 +70,9 @@ export const LoginForm = ({handleType}) => {
 						{...field}
 						placeholder='Пароль'
 						label='Пароль'
-						// className={styles.input}
+						error={errors.password?.message}
+						onChange={event => handleInputChange('password', event)}
+						variant='filled'
 					/> 
 				)}
 			/>

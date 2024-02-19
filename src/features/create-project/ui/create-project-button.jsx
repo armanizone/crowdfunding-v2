@@ -15,14 +15,21 @@ export const CreateProjectButton = ({...rest}) => {
 
   const [loading, setLoading] = React.useState(false)
 
-  const {token} = useAuth()
+  const {token, user} = useAuth()
   const {openModal} = useModal()
 
+  async function checkAuth () {
+    if (!token) return openModal.auth({
+      title: 'Авторизация', 
+      innerProps: {onSucc: () => createProject()} 
+    })
+    createProject()
+  }
+
   async function createProject () {
-    if (!token) return openModal.auth({title: 'Авторизация'})
     setLoading(true)
     await pb.collection('projects').create({
-      user: {},
+      user: user?.id,
       status: 'created',
     })
     .then((response) => {
@@ -38,7 +45,7 @@ export const CreateProjectButton = ({...rest}) => {
 
   return (
     <Button
-      onClick={createProject}
+      onClick={checkAuth}
       loading={loading}
       {...rest}
     >

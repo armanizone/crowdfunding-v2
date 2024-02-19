@@ -1,8 +1,14 @@
 import React from 'react'
+import { useLocation } from 'react-router'
 
 export const Footer = () => {
+
+  const location = useLocation()
+
+  if (location.pathname.includes('edit')) return <></>
+
   return (
-    <footer className="bg-white py-4 border-t border-slate-200 mt-8">
+    <footer className="bg-white py-4 border-t border-slate-200">
       <div className="container">
         <div className="sm:flex sm:flex-wrap md:py-4">
           <div className="text-center sm:text-left sm:w-1/2 md:w-1/4 xl:w-1/6">

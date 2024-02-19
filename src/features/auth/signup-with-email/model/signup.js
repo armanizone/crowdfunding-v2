@@ -16,7 +16,7 @@ export async function signupWithEmail (data) {
     passwordConfirm: data.password
   })
   .then(async (res) => {
-    await pb.collection('users').authWithPassword(res.email, data.password)
+    return await pb.collection('users').authWithPassword(res.email, data.password)
   })
  } catch (err) {
   throw err

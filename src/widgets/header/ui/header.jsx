@@ -8,6 +8,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useMediaQuery } from '@mantine/hooks'
 
 import next from 'shared/assets/next.png'
+import { ProfileButton } from './profile-button'
 
 export const styles = {
   nav: 'hidden md:flex items-center gap-x-4 lg:gap-x-8',
@@ -31,7 +32,7 @@ export const Header = () => {
   const matches = useMediaQuery('(min-width: 768px)')
 
   return (
-    <div className='w-full bg-white border border-slate-200 z-50 mb-8'>
+    <div className='w-full bg-white border border-slate-200 z-50'>
       <div className='container'>
         <div className='flex items-center justify-between py-4'>
           <Burger
@@ -73,6 +74,7 @@ export const Header = () => {
                     <div className={styles.divider}></div>
                   </>
                 )}
+                <ProfileButton/>
                 {/* <UserMenu/>  */}
               </nav>
         </div>

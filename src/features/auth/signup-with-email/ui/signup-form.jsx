@@ -4,12 +4,13 @@ import { useForm, Controller } from 'react-hook-form'
 import { signupSchema, signupWithEmail } from '../model/signup';
 import { yupResolver } from "@hookform/resolvers/yup"
 import { showNotification } from '@mantine/notifications';
-import { useLocation, useNavigate } from 'react-router';
 
-export const SignupForm = ({handleType}) => {
-
-  const navigate = useNavigate()
-  const location = useLocation()
+/**
+ * 
+ * @param {import('@mantine/modals').ContextModalProps} props.rest 
+ * @returns 
+ */
+export const SignupForm = ({handleType, ...rest}) => {
 
   const { control, handleSubmit, clearErrors, setValue, formState: { errors, isLoading }} = useForm({
     values: {
@@ -26,13 +27,17 @@ export const SignupForm = ({handleType}) => {
   const onSumbit = async (data) => {
     await signupWithEmail(data)
     .then((res) => {
+      console.log(res, 'res');
       showNotification({
         title: 'Айторизация',
-        message: `Вы успешно вошли в систему как ${res?.name}`
+        message: `Вы успешно вошли в систему как ${res.record?.name}`,
+        color: `blue`
       })
-      navigate(location.pathname)
+      rest.context.closeModal(rest.id)
+			rest.innerProps?.onSucc()
     })
     .catch((err) => {
+      setErrorMessage(err)
       console.log(err, 'err');
     })
   };
@@ -48,67 +53,68 @@ export const SignupForm = ({handleType}) => {
       onSubmit={handleSubmit(onSumbit)}
       className='space-y-4'
     >
-        <Controller
-          name="name"
-          control={control}
-          render={({field}) => (
-            <TextInput
-              {...field}
-              name='name'
-              placeholder='Ваше имя'
-              label='Имя'
-              variant='filled'
-              onChange={event => handleInputChange('name', event)}
-              error={errors.name?.message}
-            />
-          )}
-        />
-        <Controller
-          name="email"
-          control={control}
-          render={({field}) => (
-            <TextInput
-              {...field}
-              name='email'
-              placeholder='Ваш email'
-              label='Почта'
-              variant='filled'
-              onChange={event => handleInputChange('email', event)}
-              error={errors.email?.message}
-            />
-          )}
-        />
-        <Controller
-          name="password"
-          control={control}
-          render={({field}) => (
-            <PasswordInput
-              {...field}
-              name='password'
-              placeholder='Пароль'
-              label='Пароль'
-              variant='filled'
-              onChange={event => handleInputChange('password', event)}
-              error={errors.password?.message}
-            />
-          )}
-        />
+      <Controller
+        name="name"
+        control={control}
+        render={({field}) => (
+          <TextInput
+            {...field}
+            name='name'
+            placeholder='Ваше имя'
+            label='Имя'
+            variant='filled'
+            onChange={event => handleInputChange('name', event)}
+            error={errors.name?.message}
+          />
+        )}
+      />
+      <Controller
+        name="email"
+        control={control}
+        render={({field}) => (
+          <TextInput
+            {...field}
+            name='email'
+            placeholder='Ваш email'
+            label='Почта'
+            variant='filled'
+            onChange={event => handleInputChange('email', event)}
+            error={errors.email?.message}
+          />
+        )}
+      />
+      <Controller
+        name="password"
+        control={control}
+        render={({field}) => (
+          <PasswordInput
+            {...field}
+            name='password'
+            placeholder='Пароль'
+            label='Пароль'
+            variant='filled'
+            onChange={event => handleInputChange('password', event)}
+            error={errors.password?.message}
+          />
+        )}
+      />
 
-        <Controller
-          name="password_confirmation"
-          control={control}
-          render={({field}) => (
-            <PasswordInput
-              {...field}
-              name='password_confirmation'
-              placeholder='Подтверждение пароля'
-              label='Подтверждение пароля'
-              variant='filled'
-              onChange={event => handleInputChange('password_confirmation', event)}
-              error={errors.password_confirmation?.message}
-            />
-          )}
-        />
+      <Controller
+        name="password_confirmation"
+        control={control}
+        render={({field}) => (
+          <PasswordInput
+            {...field}
+            name='password_confirmation'
+            placeholder='Подтверждение пароля'
+            label='Подтверждение пароля'
+            variant='filled'
+            onChange={event => handleInputChange('password_confirmation', event)}
+            error={errors.password_confirmation?.message}
+          />
+        )}
+      />
+      
       <Button
         type='submit'
         fullWidth
