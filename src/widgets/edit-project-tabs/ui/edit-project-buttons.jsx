@@ -5,12 +5,12 @@ import { useSearchParams } from 'react-router-dom'
 
 import { BsEye } from 'react-icons/bs'
 
-export const EditProjectButtons = ({className, ...props}) => {
+export const EditProjectButtons = ({className, tab, ...props}) => {
 
   const [searchParams, setSearchParams] = useSearchParams()
 
   function handleBackClick () {
-    switch(searchParams.get('tab')) {
+    switch(tab) {
       case null: 
         break
       case 'details':
@@ -30,7 +30,7 @@ export const EditProjectButtons = ({className, ...props}) => {
   }
 
   function handleForwardClick () {
-    switch(searchParams.get('tab')) {
+    switch(tab) {
       case null: 
         setSearchParams({tab: 'details'})
         break
@@ -48,35 +48,37 @@ export const EditProjectButtons = ({className, ...props}) => {
 
   return (
 
-    <div className={clsx(className, `bg-white p-4 rounded-md shadow flex items-center gap-4 mt-4`)} {...props}>
-      <Button
-        size='sm'
-        onClick={handleBackClick}
-        variant='light'
-        disabled={!searchParams.get('tab')}
-      >
-        Назад
-      </Button>
+    <div className={clsx(className, `bg-white p-4 rounded-md shadow grid grid-cols-3 items-center gap-4 mt-4`)} {...props}>
+        <div>
+          {searchParams.get('tab') && (
+            <Button
+              onClick={handleBackClick}
+              variant='light'
+              disabled={!searchParams.get('tab')}
+            >
+              Назад
+            </Button>
+          )}
+        </div>
       <div className='w-full flex gap-4 justify-center'>
         <Button
           variant='subtle'
-          leftIcon={<BsEye />}
+          // leftIcon={<BsEye />}
           size='sm'
           onClick={() => setPreview(true)}
         >
           Предпросмотр
         </Button>
-        {/* {callback && (
-          <Button
-            size='sm'
-            variant='filled'
-            onClick={callback}
-            loading={loading}
-          >
-            Сохранить
-          </Button>
-        )} */}
+        <Button
+          size='sm'
+          variant='filled'
+          // onClick={callback}
+          // loading={loading}
+        >
+          Сохранить
+        </Button>
       </div>
+      <div className='ml-auto'>
         <Button
           size='sm'
           onClick={handleForwardClick}
@@ -85,6 +87,7 @@ export const EditProjectButtons = ({className, ...props}) => {
         >
           Продолжить
         </Button>
+      </div>
           {/* <Button
             size='sm'
             disabled
@@ -101,3 +104,4 @@ export const EditProjectButtons = ({className, ...props}) => {
   )
 
 }
+

@@ -27,7 +27,9 @@ export const LoginForm = ({handleType, ...rest}) => {
 				color: 'blue'
 			})
 			rest.context.closeModal(rest.id)
-			rest.innerProps?.onSucc()
+			if (rest.innerProps?.onSucc) {
+				rest.innerProps?.onSucc()
+			}
 		})
 		.catch(err => {
 			setErrorMessage(err)

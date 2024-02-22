@@ -5,9 +5,6 @@ import { useSearchParams } from 'react-router-dom'
 import { Details, Main, Rewards, Verification } from '..'
 import { EditProjectButtons } from './edit-project-buttons'
 import { pb } from 'shared/api'
-import { useQuery } from '@tanstack/react-query'
-
-const EditProjectContext = React.createContext(null)
 
 export const EditProjectTabs = () => {
 
@@ -17,7 +14,7 @@ export const EditProjectTabs = () => {
 
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const tabValue = 
+  const tab = 
     ((searchParams.get('tab') === `details`) && `details`) ||
     ((searchParams.get('tab') === `rewards`) && `rewards`) ||
     ((searchParams.get('tab') === `verification`) && `verification`) ||
@@ -31,20 +28,44 @@ export const EditProjectTabs = () => {
   }
 
   const [project, setProject] = React.useState({})
+  const [rewards, setRewards] = React.useState({})
 
   async function getProject () {
-    await pb.collection('projects').getOne(id, {expand: 'user'})
+    return await pb.collection('projects').getOne(id, {expand: 'user'})
   }
 
   async function getRewards () {
-    await pb.collection('rewards').getList(1, 10, {filter: `project = ${id}`})
+    return await pb.collection('rewards').getList(1, 10, {filter: `project = '${id}'`})
+  }
+
+  React.useEffect(() => {
+    getProject()
+    .then((res) => {
+      setProject(res)
+    })
+  }, [])
+
+  React.useEffect(() => {
+    if (tab === 'rewards') {
+      getRewards()
+      .then(res => {
+        setRewards(res)
+      })
+    }
+  }, [tab])
+
+
+  const context = {
+    project,
+    rewards,
+    tab,
   }
 
   return (
     <div className="container h-full">
       <div className='flex flex-col h-full'>
         <Tabs
-          value={`${tabValue}`}
+          value={`${tab}`}
           onChange={(value) => handleTabChange(value)}
           variant='default'
           radius='md'
@@ -61,16 +82,14 @@ export const EditProjectTabs = () => {
             <Tabs.Tab value={`verification`}>Верификация</Tabs.Tab>
             <Tabs.Tab value={`incubator`}>Бизнес-инкубатор</Tabs.Tab>  
           </Tabs.List>
-          <Tabs.Panel value={tabValue} pt='md'>
-            <EditProjectContext.Provider>
-              {tabValue === 'details' && <Details/>}
-              {tabValue === 'rewards' && <Rewards/>}
-              {tabValue === 'verification' && <Verification/>}
-              {tabValue === 'edit' && <Main/>}
-            </EditProjectContext.Provider>
+          <Tabs.Panel value={tab} pt='md'>
+            {tab === 'edit' && <Main {...context} />}
+            {tab === 'details' && <Details {...context} />}
+            {tab === 'rewards' && <Rewards {...context} />}
+            {tab === 'verification' && <Verification {...context} />}
           </Tabs.Panel>
         </Tabs>
-        <EditProjectButtons/>
+        <EditProjectButtons {...context} />
       </div>
     </div>
   )
